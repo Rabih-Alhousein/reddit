@@ -1,6 +1,8 @@
+import Navbar from "../components/Navbar";
+
 const Index = () => (
   <div>
-    <h1>Hello Next.js 👋</h1>
+    <Navbar />
   </div>
 );
 
