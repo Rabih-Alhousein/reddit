@@ -7,9 +7,9 @@ import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 
-interface registerProps {}
+interface loginProps {}
 
-const register: React.FC<registerProps> = ({}) => {
+const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
@@ -45,7 +45,7 @@ const register: React.FC<registerProps> = ({}) => {
               colorScheme="teal"
               isLoading={isSubmitting}
             >
-              Register
+              Login
             </Button>
           </Form>
         )}
@@ -54,4 +54,4 @@ const register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default register;
+export default Login;
