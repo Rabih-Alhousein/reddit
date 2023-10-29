@@ -44,6 +44,7 @@ export type Mutation = {
   __typename?: "Mutation";
   createPost: Post;
   deletePost: Scalars["Boolean"]["output"];
+  forgotPassword: Scalars["Boolean"]["output"];
   login: UserResponse;
   logout: Scalars["Boolean"]["output"];
   register: UserResponse;
@@ -58,8 +59,13 @@ export type MutationDeletePostArgs = {
   id: Scalars["Float"]["input"];
 };
 
+export type MutationForgotPasswordArgs = {
+  email: Scalars["String"]["input"];
+};
+
 export type MutationLoginArgs = {
-  options: UsernamePasswordInput;
+  password: Scalars["String"]["input"];
+  usernameOrEmail: Scalars["String"]["input"];
 };
 
 export type MutationRegisterArgs = {
@@ -94,6 +100,7 @@ export type QueryPostArgs = {
 export type User = {
   __typename?: "User";
   createdAt: Scalars["DateTime"]["output"];
+  email: Scalars["String"]["output"];
   id: Scalars["Float"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
   username: Scalars["String"]["output"];
@@ -106,6 +113,7 @@ export type UserResponse = {
 };
 
 export type UsernamePasswordInput = {
+  email: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
   username: Scalars["String"]["input"];
 };
@@ -119,7 +127,8 @@ export type RegularUserFragment = {
 } & { " $fragmentName"?: "RegularUserFragment" };
 
 export type LoginMutationVariables = Exact<{
-  options: UsernamePasswordInput;
+  password: Scalars["String"]["input"];
+  usernameOrEmail: Scalars["String"]["input"];
 }>;
 
 export type LoginMutation = {
@@ -181,6 +190,19 @@ export type MeQuery = {
   } | null;
 };
 
+export type PostsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PostsQuery = {
+  __typename?: "Query";
+  posts: Array<{
+    __typename?: "Post";
+    id: number;
+    createdAt: any;
+    updatedAt: any;
+    title: string;
+  }>;
+};
+
 export const RegularUserFragmentDoc = gql`
   fragment RegularUser on User {
     id
@@ -190,8 +212,8 @@ export const RegularUserFragmentDoc = gql`
   }
 `;
 export const LoginDocument = gql`
-  mutation Login($options: usernamePasswordInput!) {
-    login(options: $options) {
+  mutation Login($password: String!, $usernameOrEmail: String!) {
+    login(password: $password, usernameOrEmail: $usernameOrEmail) {
       errors {
         field
         message
@@ -258,6 +280,25 @@ export function useMeQuery(
 ) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({
     query: MeDocument,
+    ...options,
+  });
+}
+export const PostsDocument = gql`
+  query Posts {
+    posts {
+      id
+      createdAt
+      updatedAt
+      title
+    }
+  }
+`;
+
+export function usePostsQuery(
+  options?: Omit<Urql.UseQueryArgs<PostsQueryVariables>, "query">
+) {
+  return Urql.useQuery<PostsQuery, PostsQueryVariables>({
+    query: PostsDocument,
     ...options,
   });
 }
