@@ -22,6 +22,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "urql": "^4.0.5",
+    "wonka": "^6.3.4",
     "yarn": "^1.22.19"
   },
   "devDependencies": {

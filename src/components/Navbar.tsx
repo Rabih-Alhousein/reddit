@@ -46,7 +46,13 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
     );
   }
   return (
-    <Flex bg="tan" p={4} justifyContent={"flex-end"}>
+    <Flex
+      bg="tan"
+      p={4}
+      justifyContent={"flex-end"}
+      position="sticky"
+      zIndex={99}
+    >
       {body}
     </Flex>
   );
