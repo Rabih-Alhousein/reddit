@@ -16,17 +16,29 @@ interface loginProps {}
 const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
+
+  const handleLoginResult = (result, setErrors) => {
+    const loginResult = result.data?.login;
+
+    if (loginResult?.errors) {
+      setErrors(toErrorMap(loginResult.errors));
+      return;
+    }
+
+    if (loginResult?.user) {
+      const nextRoute =
+        typeof router.query.next === "string" ? router.query.next : "/";
+      router.push(nextRoute);
+    }
+  };
+
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           const result = await login(values);
-          if (result.data?.login.errors) {
-            setErrors(toErrorMap(result.data.login.errors));
-          } else if (result.data?.login.user) {
-            router.push("/");
-          }
+          handleLoginResult(result, setErrors);
         }}
       >
         {({ isSubmitting }) => (
