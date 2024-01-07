@@ -1,4 +1,4 @@
-import { Resolver, cacheExchange } from "@urql/exchange-graphcache";
+import { Cache, Resolver, cacheExchange } from "@urql/exchange-graphcache";
 import { fetchExchange, stringifyVariables } from "urql";
 
 import {
@@ -51,7 +51,6 @@ const cursorPagination = (): Resolver => {
     fieldInfos.forEach((fi) => {
       const key = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string;
       const data = cache.resolve(key, "posts") as string[];
-      console.log({ key, data });
       const _hasMore = cache.resolve(key, "hasMore");
       if (!_hasMore) {
         hasMore = _hasMore as boolean;
@@ -68,6 +67,14 @@ const cursorPagination = (): Resolver => {
   };
 };
 
+function invalidateAllPosts(cache: Cache) {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "posts", fi.arguments || {});
+  });
+}
+
 export const createUrqlClient = (ssrExchange: any) => ({
   url: "http://localhost:4000/graphql",
   exchanges: [
@@ -79,6 +86,10 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          createPost: (_result, args, cache, info) => {
+            invalidateAllPosts(cache);
+          },
+
           login: (_result, _, cache, __) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,

@@ -50,6 +50,7 @@ export type Mutation = {
   logout: Scalars["Boolean"]["output"];
   register: UserResponse;
   updatePost?: Maybe<Post>;
+  vote: Scalars["Boolean"]["output"];
 };
 
 export type MutationChangePasswordArgs = {
@@ -83,6 +84,11 @@ export type MutationUpdatePostArgs = {
   title?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type MutationVoteArgs = {
+  postId: Scalars["Int"]["input"];
+  value: Scalars["Int"]["input"];
+};
+
 export type PaginatedPosts = {
   __typename?: "PaginatedPosts";
   hasMore: Scalars["Boolean"]["output"];
@@ -92,6 +98,7 @@ export type PaginatedPosts = {
 export type Post = {
   __typename?: "Post";
   createdAt: Scalars["DateTime"]["output"];
+  creator: User;
   creatorId: Scalars["Float"]["output"];
   id: Scalars["Float"]["output"];
   points: Scalars["Float"]["output"];
@@ -99,6 +106,7 @@ export type Post = {
   textSnippet: Scalars["String"]["output"];
   title: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
+  upvotes: Array<Upvote>;
 };
 
 export type PostInput = {
@@ -123,12 +131,24 @@ export type QueryPostsArgs = {
   limit: Scalars["Int"]["input"];
 };
 
+export type Upvote = {
+  __typename?: "Upvote";
+  createdAt: Scalars["DateTime"]["output"];
+  post: Post;
+  postId: Scalars["Float"]["output"];
+  updatedAt: Scalars["DateTime"]["output"];
+  user: User;
+  userId: Scalars["Float"]["output"];
+  value: Scalars["Float"]["output"];
+};
+
 export type User = {
   __typename?: "User";
   createdAt: Scalars["DateTime"]["output"];
   email: Scalars["String"]["output"];
   id: Scalars["Float"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
+  upvotes: Array<Upvote>;
   username: Scalars["String"]["output"];
 };
 
@@ -302,11 +322,12 @@ export type PostsQuery = {
       id: number;
       title: string;
       text: string;
+      textSnippet: string;
       points: number;
       creatorId: number;
       createdAt: any;
       updatedAt: any;
-      textSnippet: string;
+      creator: { __typename?: "User"; id: number; username: string };
     }>;
   };
 };
@@ -470,11 +491,15 @@ export const PostsDocument = gql`
         id
         title
         text
+        textSnippet
         points
         creatorId
+        creator {
+          id
+          username
+        }
         createdAt
         updatedAt
-        textSnippet
       }
       hasMore
     }
