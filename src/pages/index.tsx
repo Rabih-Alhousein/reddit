@@ -14,6 +14,7 @@ import { usePostsQuery, useVoteMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useState } from "react";
 import UpvoteSection from "../components/UpvoteSection";
+import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -47,9 +48,6 @@ const Index = () => {
     <Layout>
       <Flex justifyContent={"space-between"}>
         <Heading>Reddit</Heading>
-        <NextLink href="/create-post">
-          <Link>Create Post</Link>
-        </NextLink>
       </Flex>
       <br />
       {posts && fetching ? (
@@ -59,11 +57,20 @@ const Index = () => {
           {posts.map((p) => (
             <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
               <UpvoteSection handleVote={handleVote} post={p} />
-              <Box>
-                <Heading fontSize="xl">{p.title}</Heading>
-                <Text>Post by {p.creator.username}</Text>
-                <Text mt={4}>{p.textSnippet}...</Text>
-              </Box>
+              <Flex justifyContent="space-between" flex={1}>
+                <Box>
+                  <NextLink href="/page/[id]" as={`/page/${p.id}`}>
+                    <Link>
+                      <Heading fontSize="xl">{p.title}</Heading>
+                    </Link>
+                  </NextLink>
+                  <Text>Post by {p.creator.username}</Text>
+                  <Text mt={4}>{p.textSnippet}...</Text>
+                </Box>
+                <Box alignSelf={"flex-end"}>
+                  <EditDeletePostButtons id={p.id} creatorId={p.creator.id} />
+                </Box>
+              </Flex>
             </Flex>
           ))}
         </Stack>

@@ -6,12 +6,12 @@ query Posts($limit: Int!, $cursor: String) {
       text
       textSnippet
       points
+      voteStatus
       creatorId
       creator {
         id
         username
       }
-      voteStatus
       createdAt
       updatedAt
     }

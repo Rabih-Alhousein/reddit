@@ -2,6 +2,7 @@ import { Cache, Resolver, cacheExchange } from "@urql/exchange-graphcache";
 import { fetchExchange, gql, stringifyVariables } from "urql";
 
 import {
+  DeletePostMutationVariables,
   LoginMutation,
   LogoutMutation,
   MeDocument,
@@ -87,6 +88,12 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          deletePost: (_result, args, cache, info) => {
+            cache.invalidate({
+              __typename: "Post",
+              id: (args as DeletePostMutationVariables).id,
+            });
+          },
           createPost: (_result, args, cache, info) => {
             invalidateAllPosts(cache);
           },

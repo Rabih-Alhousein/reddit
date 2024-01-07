@@ -63,7 +63,7 @@ export type MutationCreatePostArgs = {
 };
 
 export type MutationDeletePostArgs = {
-  id: Scalars["Float"]["input"];
+  id: Scalars["Int"]["input"];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -124,7 +124,7 @@ export type Query = {
 };
 
 export type QueryPostArgs = {
-  id: Scalars["Float"]["input"];
+  id: Scalars["Int"]["input"];
 };
 
 export type QueryPostsArgs = {
@@ -248,6 +248,15 @@ export type CreatePostMutation = {
   };
 };
 
+export type DeletePostMutationVariables = Exact<{
+  id: Scalars["Int"]["input"];
+}>;
+
+export type DeletePostMutation = {
+  __typename?: "Mutation";
+  deletePost: boolean;
+};
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars["String"]["input"];
 }>;
@@ -328,6 +337,26 @@ export type MeQuery = {
   } | null;
 };
 
+export type PostQueryVariables = Exact<{
+  postId: Scalars["Int"]["input"];
+}>;
+
+export type PostQuery = {
+  __typename?: "Query";
+  post?: {
+    __typename?: "Post";
+    id: number;
+    title: string;
+    text: string;
+    points: number;
+    creatorId: number;
+    voteStatus?: number | null;
+    createdAt: any;
+    updatedAt: any;
+    creator: { __typename?: "User"; id: number; username: string };
+  } | null;
+};
+
 export type PostsQueryVariables = Exact<{
   limit: Scalars["Int"]["input"];
   cursor?: InputMaybe<Scalars["String"]["input"]>;
@@ -345,8 +374,8 @@ export type PostsQuery = {
       text: string;
       textSnippet: string;
       points: number;
-      creatorId: number;
       voteStatus?: number | null;
+      creatorId: number;
       createdAt: any;
       updatedAt: any;
       creator: { __typename?: "User"; id: number; username: string };
@@ -436,6 +465,17 @@ export const CreatePostDocument = gql`
 export function useCreatePostMutation() {
   return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(
     CreatePostDocument
+  );
+}
+export const DeletePostDocument = gql`
+  mutation deletePost($id: Int!) {
+    deletePost(id: $id)
+  }
+`;
+
+export function useDeletePostMutation() {
+  return Urql.useMutation<DeletePostMutation, DeletePostMutationVariables>(
+    DeletePostDocument
   );
 }
 export const ForgotPasswordDocument = gql`
@@ -531,6 +571,33 @@ export function useMeQuery(
     ...options,
   });
 }
+export const PostDocument = gql`
+  query Post($postId: Int!) {
+    post(id: $postId) {
+      id
+      title
+      text
+      points
+      creatorId
+      voteStatus
+      creator {
+        id
+        username
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export function usePostQuery(
+  options: Omit<Urql.UseQueryArgs<PostQueryVariables>, "query">
+) {
+  return Urql.useQuery<PostQuery, PostQueryVariables>({
+    query: PostDocument,
+    ...options,
+  });
+}
 export const PostsDocument = gql`
   query Posts($limit: Int!, $cursor: String) {
     posts(limit: $limit, cursor: $cursor) {
@@ -540,12 +607,12 @@ export const PostsDocument = gql`
         text
         textSnippet
         points
+        voteStatus
         creatorId
         creator {
           id
           username
         }
-        voteStatus
         createdAt
         updatedAt
       }
