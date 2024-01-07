@@ -83,6 +83,12 @@ export type MutationUpdatePostArgs = {
   title?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type PaginatedPosts = {
+  __typename?: "PaginatedPosts";
+  hasMore: Scalars["Boolean"]["output"];
+  posts: Array<Post>;
+};
+
 export type Post = {
   __typename?: "Post";
   createdAt: Scalars["DateTime"]["output"];
@@ -105,7 +111,7 @@ export type Query = {
   hello: Scalars["String"]["output"];
   me?: Maybe<User>;
   post?: Maybe<Post>;
-  posts: Array<Post>;
+  posts: PaginatedPosts;
 };
 
 export type QueryPostArgs = {
@@ -113,7 +119,7 @@ export type QueryPostArgs = {
 };
 
 export type QueryPostsArgs = {
-  cusror?: InputMaybe<Scalars["String"]["input"]>;
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
   limit: Scalars["Int"]["input"];
 };
 
@@ -282,23 +288,27 @@ export type MeQuery = {
 };
 
 export type PostsQueryVariables = Exact<{
-  cusror?: InputMaybe<Scalars["String"]["input"]>;
   limit: Scalars["Int"]["input"];
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type PostsQuery = {
   __typename?: "Query";
-  posts: Array<{
-    __typename?: "Post";
-    id: number;
-    title: string;
-    text: string;
-    textSnippet: string;
-    points: number;
-    creatorId: number;
-    createdAt: any;
-    updatedAt: any;
-  }>;
+  posts: {
+    __typename?: "PaginatedPosts";
+    hasMore: boolean;
+    posts: Array<{
+      __typename?: "Post";
+      id: number;
+      title: string;
+      text: string;
+      points: number;
+      creatorId: number;
+      createdAt: any;
+      updatedAt: any;
+      textSnippet: string;
+    }>;
+  };
 };
 
 export const RegularErrorFragmentDoc = gql`
@@ -454,16 +464,19 @@ export function useMeQuery(
   });
 }
 export const PostsDocument = gql`
-  query Posts($cusror: String, $limit: Int!) {
-    posts(cusror: $cusror, limit: $limit) {
-      id
-      title
-      text
-      textSnippet
-      points
-      creatorId
-      createdAt
-      updatedAt
+  query Posts($limit: Int!, $cursor: String) {
+    posts(limit: $limit, cursor: $cursor) {
+      posts {
+        id
+        title
+        text
+        points
+        creatorId
+        createdAt
+        updatedAt
+        textSnippet
+      }
+      hasMore
     }
   }
 `;
