@@ -1,5 +1,5 @@
 import { Cache, Resolver, cacheExchange } from "@urql/exchange-graphcache";
-import { fetchExchange, stringifyVariables } from "urql";
+import { fetchExchange, gql, stringifyVariables } from "urql";
 
 import {
   LoginMutation,
@@ -7,6 +7,7 @@ import {
   MeDocument,
   MeQuery,
   RegisterMutation,
+  VoteMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
@@ -88,6 +89,51 @@ export const createUrqlClient = (ssrExchange: any) => ({
         Mutation: {
           createPost: (_result, args, cache, info) => {
             invalidateAllPosts(cache);
+          },
+
+          vote: (_result, args, cache, info) => {
+            const { postId, value } = args as VoteMutationVariables;
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  points
+                  voteStatus
+                }
+              `,
+              { id: postId } as any
+            );
+
+            if (data) {
+              if (data.voteStatus === value) {
+                // want to remove the upvote
+                const newPoints = (data.points as number) - value;
+                console.log(newPoints);
+
+                cache.writeFragment(
+                  gql`
+                    fragment __ on Post {
+                      points
+                      voteStatus
+                    }
+                  `,
+                  { id: postId, points: newPoints, voteStatus: null } as any
+                );
+              } else {
+                const newPoints =
+                  (data.points as number) + (!data.voteStatus ? 1 : 2) * value;
+
+                cache.writeFragment(
+                  gql`
+                    fragment __ on Post {
+                      points
+                      voteStatus
+                    }
+                  `,
+                  { id: postId, points: newPoints, voteStatus: value } as any
+                );
+              }
+            }
           },
 
           login: (_result, _, cache, __) => {

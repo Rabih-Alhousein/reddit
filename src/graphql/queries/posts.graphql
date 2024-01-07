@@ -11,6 +11,7 @@ query Posts($limit: Int!, $cursor: String) {
         id
         username
       }
+      voteStatus
       createdAt
       updatedAt
     }

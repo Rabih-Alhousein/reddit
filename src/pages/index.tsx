@@ -10,9 +10,10 @@ import {
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import Layout from "../components/Layout";
-import { usePostsQuery } from "../generated/graphql";
+import { usePostsQuery, useVoteMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useState } from "react";
+import UpvoteSection from "../components/UpvoteSection";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -24,6 +25,8 @@ const Index = () => {
     variables,
   });
 
+  const [, vote] = useVoteMutation();
+
   const { posts = [], hasMore = false } = data?.posts || {};
 
   const handlePagination = () => {
@@ -31,6 +34,13 @@ const Index = () => {
       limit: variables.limit,
       cursor: posts[posts.length - 1].createdAt,
     });
+  };
+
+  const handleVote = async (postId: number, value: number) => {
+    console.log(value);
+    const result = await vote({ postId: postId, value });
+    if (!result.error) {
+    }
   };
 
   return (
@@ -47,11 +57,14 @@ const Index = () => {
       ) : (
         <Stack spacing={6}>
           {posts.map((p) => (
-            <Box key={p.id} p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">{p.title}</Heading>
-              <Text>Post by {p.creator.username}</Text>
-              <Text mt={4}>{p.textSnippet}...</Text>
-            </Box>
+            <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
+              <UpvoteSection handleVote={handleVote} post={p} />
+              <Box>
+                <Heading fontSize="xl">{p.title}</Heading>
+                <Text>Post by {p.creator.username}</Text>
+                <Text mt={4}>{p.textSnippet}...</Text>
+              </Box>
+            </Flex>
           ))}
         </Stack>
       )}
