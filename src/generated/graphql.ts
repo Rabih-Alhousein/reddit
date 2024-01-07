@@ -80,8 +80,9 @@ export type MutationRegisterArgs = {
 };
 
 export type MutationUpdatePostArgs = {
-  id: Scalars["Float"]["input"];
-  title?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars["Int"]["input"];
+  text: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
 };
 
 export type MutationVoteArgs = {
@@ -317,6 +318,29 @@ export type RegisterMutation = {
   };
 };
 
+export type UpdatePostMutationVariables = Exact<{
+  text: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+  id: Scalars["Int"]["input"];
+}>;
+
+export type UpdatePostMutation = {
+  __typename?: "Mutation";
+  updatePost?: {
+    __typename?: "Post";
+    id: number;
+    title: string;
+    text: string;
+    points: number;
+    creatorId: number;
+    voteStatus?: number | null;
+    createdAt: any;
+    updatedAt: any;
+    textSnippet: string;
+    creator: { __typename?: "User"; id: number; username: string };
+  } | null;
+};
+
 export type VoteMutationVariables = Exact<{
   postId: Scalars["Int"]["input"];
   value: Scalars["Int"]["input"];
@@ -541,6 +565,31 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(
     RegisterDocument
+  );
+}
+export const UpdatePostDocument = gql`
+  mutation UpdatePost($text: String!, $title: String!, $id: Int!) {
+    updatePost(text: $text, title: $title, id: $id) {
+      id
+      title
+      text
+      points
+      creatorId
+      voteStatus
+      creator {
+        id
+        username
+      }
+      createdAt
+      updatedAt
+      textSnippet
+    }
+  }
+`;
+
+export function useUpdatePostMutation() {
+  return Urql.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(
+    UpdatePostDocument
   );
 }
 export const VoteDocument = gql`

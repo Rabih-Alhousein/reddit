@@ -9,12 +9,15 @@ import {
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import Layout from "../components/Layout";
-import { usePostsQuery, useVoteMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import { useState } from "react";
+import Layout from "../components/Layout";
+import PostActionButtons from "../components/PostActionButtons";
 import UpvoteSection from "../components/UpvoteSection";
-import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
+import {
+  usePostsQuery,
+  useVoteMutation
+} from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -64,11 +67,13 @@ const Index = () => {
                       <Heading fontSize="xl">{p.title}</Heading>
                     </Link>
                   </NextLink>
-                  <Text>Post by {p.creator.username}</Text>
+                  <Text>
+                    Post by {p.creator.username} {p.id}
+                  </Text>
                   <Text mt={4}>{p.textSnippet}...</Text>
                 </Box>
                 <Box alignSelf={"flex-end"}>
-                  <EditDeletePostButtons id={p.id} creatorId={p.creator.id} />
+                  <PostActionButtons id={p.id} creatorId={p.creator.id} />
                 </Box>
               </Flex>
             </Flex>
