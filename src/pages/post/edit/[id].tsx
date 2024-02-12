@@ -43,31 +43,32 @@ const EditPost = ({}) => {
       <Formik
         initialValues={{ title: data.post.title, text: data.post.text }}
         onSubmit={async (values) => {
-          console.log(values);
           await updatePost({ ...values, id: intId });
           router.back();
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <InputField name="title" placeholder="title" label="Title" />
-            <Box mt={4}>
-              <InputField
-                textarea
-                name="text"
-                placeholder="text..."
-                label="Body"
-              />
-            </Box>
-            <Button
-              mt={4}
-              type="submit"
-              isLoading={isSubmitting}
-              colorScheme="teal"
-            >
-              update post
-            </Button>
-          </Form>
+          <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+            <Form>
+              <InputField name="title" placeholder="title" label="Title" />
+              <Box mt={4}>
+                <InputField
+                  textarea
+                  name="text"
+                  placeholder="text..."
+                  label="Body"
+                />
+              </Box>
+              <Button
+                mt={4}
+                type="submit"
+                isLoading={isSubmitting}
+                colorScheme="teal"
+              >
+                update post
+              </Button>
+            </Form>
+          </Box>
         )}
       </Formik>
     </Layout>

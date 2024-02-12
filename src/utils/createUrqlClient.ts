@@ -115,7 +115,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
               if (data.voteStatus === value) {
                 // want to remove the upvote
                 const newPoints = (data.points as number) - value;
-                console.log(newPoints);
 
                 cache.writeFragment(
                   gql`
@@ -158,6 +157,8 @@ export const createUrqlClient = (ssrExchange: any) => ({
                 }
               }
             );
+
+            invalidateAllPosts(cache);
           },
           register: (_result, args, cache, info) => {
             betterUpdateQuery<RegisterMutation, MeQuery>(
@@ -182,6 +183,8 @@ export const createUrqlClient = (ssrExchange: any) => ({
               _result,
               () => ({ me: null })
             );
+
+            invalidateAllPosts(cache);
           },
         },
       },

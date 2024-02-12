@@ -1,28 +1,20 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Link,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Flex, Input, Stack } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { useState } from "react";
 import Layout from "../components/Layout";
-import PostActionButtons from "../components/PostActionButtons";
-import UpvoteSection from "../components/UpvoteSection";
-import {
-  usePostsQuery,
-  useVoteMutation
-} from "../generated/graphql";
+import { usePostsQuery, useVoteMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import Image from "next/image";
+import profileUser from "../public/profile user.png";
+import Post from "../components/Post";
+import Sidebar from "../components/Sidebar";
 
 const Index = () => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as string | null,
+    search: "",
   });
 
   const [{ data, fetching }] = usePostsQuery({
@@ -37,62 +29,58 @@ const Index = () => {
     setVariables({
       limit: variables.limit,
       cursor: posts[posts.length - 1].createdAt,
+      search: variables.search,
     });
   };
 
   const handleVote = async (postId: number, value: number) => {
-    console.log(value);
     const result = await vote({ postId: postId, value });
     if (!result.error) {
     }
   };
 
   return (
-    <Layout>
-      <Flex justifyContent={"space-between"}>
-        <Heading>Reddit</Heading>
-      </Flex>
-      <br />
-      {posts && fetching ? (
-        <div>Loading...</div>
-      ) : (
-        <Stack spacing={6}>
-          {posts.map((p) => (
-            <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
-              <UpvoteSection handleVote={handleVote} post={p} />
-              <Flex justifyContent="space-between" flex={1}>
-                <Box>
-                  <NextLink href="/page/[id]" as={`/page/${p.id}`}>
-                    <Link>
-                      <Heading fontSize="xl">{p.title}</Heading>
-                    </Link>
-                  </NextLink>
-                  <Text>
-                    Post by {p.creator.username} {p.id}
-                  </Text>
-                  <Text mt={4}>{p.textSnippet}...</Text>
-                </Box>
-                <Box alignSelf={"flex-end"}>
-                  <PostActionButtons id={p.id} creatorId={p.creator.id} />
-                </Box>
-              </Flex>
-            </Flex>
-          ))}
-        </Stack>
-      )}
-      {posts && hasMore ? (
-        <Flex>
-          <Button
-            m="auto"
-            my={8}
-            colorScheme="teal"
-            isLoading={fetching}
-            onClick={handlePagination}
-          >
-            Load More
-          </Button>
-        </Flex>
-      ) : null}
+    <Layout setVariables={setVariables}>
+      <div className="bg-[#DAE0E6]">
+        {posts && fetching ? (
+          <div>Loading...</div>
+        ) : (
+          <Flex justifyContent="center" p={4} gap={5}>
+            <div>
+              <Stack spacing={6} pb={4}>
+                <NextLink href="/create-post">
+                  <Flex justifyContent="center" gap={3} p={3} bg="#FFFFFF">
+                    <Image
+                      src={profileUser}
+                      alt="Reddit User"
+                      width={40}
+                      height={30}
+                    />
+                    <Input name="text" placeholder="Create New Post" />
+                  </Flex>
+                </NextLink>
+                {posts.map((p) => (
+                  <Post key={p.id} post={p} handleVote={handleVote} />
+                ))}
+              </Stack>
+              {posts && hasMore ? (
+                <Flex>
+                  <Button
+                    m="auto"
+                    my={8}
+                    colorScheme="teal"
+                    isLoading={fetching}
+                    onClick={handlePagination}
+                  >
+                    Load More
+                  </Button>
+                </Flex>
+              ) : null}
+            </div>
+            <Sidebar />
+          </Flex>
+        )}
+      </div>
     </Layout>
   );
 };

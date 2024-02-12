@@ -1,16 +1,23 @@
-import { Box, Button, Flex, Heading, Link } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Heading } from "@chakra-ui/react";
+import Image from "next/image";
 import NextLink from "next/link";
-import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import React from "react";
+import { useMeQuery } from "../generated/graphql";
+import RedditImg from "../public/reddit icon.jpg";
 import { isServer } from "../utils/isServer";
+import AuthButtons from "./Navbar/AuthButtons";
+import ActionIcons from "./Navbar/Icons";
+import MenuWrapper from "./Navbar/MenuWrapper";
+import SearchInput from "./searchInput";
 
-interface NavbarProps {}
+interface NavbarProps {
+  setVariables?: any;
+}
 
-const Navbar: React.FC<NavbarProps> = ({}) => {
+const Navbar: React.FC<NavbarProps> = ({ setVariables }) => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
   let body = null;
 
@@ -18,40 +25,33 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   if (fetching) {
     body = <div>Loading...</div>;
     // user not logged in
-  } else if (!data?.me) {
-    body = (
-      <div>
-        <NextLink href={"/login"}>
-          <Link mr={4}>Login</Link>
-        </NextLink>
-        <NextLink href={"/register"}>
-          <Link>Register</Link>
-        </NextLink>
-      </div>
-    );
-    // user is logged in
   } else {
     body = (
-      <Flex w={800} margin="auto" justifyContent="space-between">
-        <Heading>Reddit</Heading>
-        <Flex alignItems="center">
-          <NextLink href={"/create-post"}>
-            <Button as={Link} mr={6} size={"sm"}>
-              Create Post
-            </Button>
-          </NextLink>
-          <Flex alignItems="center">
-            <Box mr={4}>{data.me.username}</Box>
-            <Button
-              variant="link"
-              onClick={() => {
-                logout({});
-              }}
-              isLoading={logoutFetching}
-            >
-              Logout
-            </Button>
+      <Flex w="90%" margin="auto" justifyContent="space-between">
+        <NextLink href={"/"}>
+          <Flex alignItems="center" gap={3}>
+            <Image src={RedditImg} alt="Reddit" width={40} height={40} />
+            <Heading color="#ff4500">reddit</Heading>
           </Flex>
+        </NextLink>
+        <SearchInput
+          onChange={(e) =>
+            setVariables((prev: any) => ({
+              ...prev,
+              page: 3,
+              search: e.target.value,
+            }))
+          }
+        />
+        <Flex justifyContent="space-between" alignItems="center">
+          {data?.me ? (
+            <>
+              <ActionIcons />
+              <MenuWrapper />
+            </>
+          ) : (
+            <AuthButtons />
+          )}
         </Flex>
       </Flex>
     );
@@ -59,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
 
   return (
     <Flex
-      bg="tan"
+      bg="#FFFFFF"
       p={4}
       justifyContent={"flex-end"}
       position="sticky"

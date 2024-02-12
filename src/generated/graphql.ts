@@ -131,6 +131,7 @@ export type QueryPostArgs = {
 export type QueryPostsArgs = {
   cursor?: InputMaybe<Scalars["String"]["input"]>;
   limit: Scalars["Int"]["input"];
+  search?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type Upvote = {

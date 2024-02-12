@@ -5,12 +5,13 @@ import Navbar from "./Navbar";
 interface LayoutProps {
   variant?: WrapperVariant;
   children: React.ReactNode;
+  setVariables?: any;
 }
 
-const Layout: React.FC<LayoutProps> = ({ variant, children }) => {
+const Layout: React.FC<LayoutProps> = ({ variant, children, setVariables }) => {
   return (
     <>
-      <Navbar />
+      <Navbar setVariables={setVariables} />
       <Wrapper variant={variant}>{children}</Wrapper>
     </>
   );

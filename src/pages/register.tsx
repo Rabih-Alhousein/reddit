@@ -16,43 +16,45 @@ const Register: React.FC<registerProps> = ({}) => {
   const [, register] = useRegisterMutation();
   return (
     <Wrapper variant="small">
-      <Formik
-        initialValues={{ email: "", username: "", password: "" }}
-        onSubmit={async (values, { setErrors }) => {
-          const result = await register({ options: values });
-          if (result.data?.register.errors) {
-            setErrors(toErrorMap(result.data.register.errors));
-          } else if (result.data?.register.user) {
-            router.push("/");
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <InputField name="email" placeholder="email" label="Email" />
-            <InputField
-              name="username"
-              placeholder="username"
-              label="Username"
-            />
-            <Box mt={4}>
+      <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+        <Formik
+          initialValues={{ email: "", username: "", password: "" }}
+          onSubmit={async (values, { setErrors }) => {
+            const result = await register({ options: values });
+            if (result.data?.register.errors) {
+              setErrors(toErrorMap(result.data.register.errors));
+            } else if (result.data?.register.user) {
+              router.push("/");
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <InputField name="email" placeholder="email" label="Email" />
               <InputField
-                name="password"
-                placeholder="password"
-                label="Password"
+                name="username"
+                placeholder="username"
+                label="Username"
               />
-            </Box>
-            <Button
-              mt={4}
-              type="submit"
-              colorScheme="teal"
-              isLoading={isSubmitting}
-            >
-              Register
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              <Box mt={4}>
+                <InputField
+                  name="password"
+                  placeholder="password"
+                  label="Password"
+                />
+              </Box>
+              <Button
+                mt={4}
+                type="submit"
+                colorScheme="teal"
+                isLoading={isSubmitting}
+              >
+                Register
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </Box>
     </Wrapper>
   );
 };

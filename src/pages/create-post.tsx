@@ -28,27 +28,29 @@ const createPost: React.FC<{}> = ({}) => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <InputField name="title" placeholder="title" label="Title" />
-            <Box my={4}>
-              <InputField
-                name="text"
-                placeholder="text..."
-                label="Text"
-                textarea
-              />
-            </Box>
+          <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+            <Form>
+              <InputField name="title" placeholder="title" label="Title" />
+              <Box my={4}>
+                <InputField
+                  name="text"
+                  placeholder="text..."
+                  label="Text"
+                  textarea
+                />
+              </Box>
 
-            <Button
-              mt={4}
-              display="block"
-              type="submit"
-              colorScheme="teal"
-              isLoading={isSubmitting}
-            >
-              Create Post
-            </Button>
-          </Form>
+              <Button
+                mt={4}
+                display="block"
+                type="submit"
+                colorScheme="teal"
+                isLoading={isSubmitting}
+              >
+                Create Post
+              </Button>
+            </Form>
+          </Box>
         )}
       </Formik>
     </Layout>

@@ -12,7 +12,13 @@ const UpvoteSection: React.FC<UpvoteSectionProps> = ({ handleVote, post }) => {
   const { points, id, voteStatus } = post;
 
   return (
-    <Flex mr={6} direction="column" alignItems="center">
+    <Flex
+      mr={6}
+      direction="column"
+      alignItems="center"
+      background="#f2f8fc"
+      padding={5}
+    >
       <IconButton
         size={"sm"}
         aria-label="Upvote"

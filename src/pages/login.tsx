@@ -34,42 +34,44 @@ const Login: React.FC<loginProps> = ({}) => {
 
   return (
     <Wrapper variant="small">
-      <Formik
-        initialValues={{ usernameOrEmail: "", password: "" }}
-        onSubmit={async (values, { setErrors }) => {
-          const result = await login(values);
-          handleLoginResult(result, setErrors);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <InputField
-              name="usernameOrEmail"
-              placeholder="username or email"
-              label="Username or Email"
-            />
-            <Box my={4}>
+      <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+        <Formik
+          initialValues={{ usernameOrEmail: "", password: "" }}
+          onSubmit={async (values, { setErrors }) => {
+            const result = await login(values);
+            handleLoginResult(result, setErrors);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
               <InputField
-                name="password"
-                placeholder="password"
-                label="Password"
+                name="usernameOrEmail"
+                placeholder="username or email"
+                label="Username or Email"
               />
-            </Box>
-            <NextLink href="/forgot-password">
-              <Link>Forgot Password</Link>
-            </NextLink>
-            <Button
-              mt={4}
-              display="block"
-              type="submit"
-              colorScheme="teal"
-              isLoading={isSubmitting}
-            >
-              Login
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              <Box my={4}>
+                <InputField
+                  name="password"
+                  placeholder="password"
+                  label="Password"
+                />
+              </Box>
+              <NextLink href="/forgot-password">
+                <Link>Forgot Password</Link>
+              </NextLink>
+              <Button
+                mt={4}
+                display="block"
+                type="submit"
+                colorScheme="teal"
+                isLoading={isSubmitting}
+              >
+                Login
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </Box>
     </Wrapper>
   );
 };
