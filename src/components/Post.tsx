@@ -12,9 +12,9 @@ interface Props {
 
 const YourComponent: React.FC<Props> = ({ handleVote, post }) => {
   return (
-    <Flex key={post.id} shadow="md" borderWidth="1px" bg="#FFFFFF">
+    <Flex shadow="md" borderWidth="1px" bg="#FFFFFF">
       <UpvoteSection handleVote={handleVote} post={post} />
-      <Flex justifyContent="space-between" flex={1} p={5}>
+      <Flex justifyContent="space-between" flex={1} p={5} gap={3}>
         <Box>
           <NextLink href="/page/[id]" as={`/page/${post.id}`}>
             <Link>

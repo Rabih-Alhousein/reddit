@@ -36,11 +36,11 @@ const Navbar: React.FC<NavbarProps> = ({ setVariables }) => {
         </NextLink>
         <SearchInput
           onChange={(e) =>
-            setVariables((prev: any) => ({
-              ...prev,
-              page: 3,
+            setVariables({
+              limit: 10,
+              cursor: null,
               search: e.target.value,
-            }))
+            })
           }
         />
         <Flex justifyContent="space-between" alignItems="center">

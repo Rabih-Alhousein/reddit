@@ -60,7 +60,7 @@ const Index = () => {
                   </Flex>
                 </NextLink>
                 {posts.map((p) => (
-                  <Post key={p.id} post={p} handleVote={handleVote} />
+                  <Post key={p.title} post={p} handleVote={handleVote} />
                 ))}
               </Stack>
               {posts && hasMore ? (

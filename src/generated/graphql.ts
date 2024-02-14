@@ -385,6 +385,7 @@ export type PostQuery = {
 export type PostsQueryVariables = Exact<{
   limit: Scalars["Int"]["input"];
   cursor?: InputMaybe<Scalars["String"]["input"]>;
+  search?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type PostsQuery = {
@@ -649,8 +650,8 @@ export function usePostQuery(
   });
 }
 export const PostsDocument = gql`
-  query Posts($limit: Int!, $cursor: String) {
-    posts(limit: $limit, cursor: $cursor) {
+  query Posts($limit: Int!, $cursor: String, $search: String) {
+    posts(limit: $limit, cursor: $cursor, search: $search) {
       posts {
         id
         title
