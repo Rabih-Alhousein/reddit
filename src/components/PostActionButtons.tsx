@@ -28,6 +28,7 @@ const PostActionButtons: React.FC<PostActionButtonsProps> = ({
           mr={4}
           icon={<EditIcon />}
           aria-label="Edit Post"
+          size={"sm"}
         />
       </NextLink>
       <IconButton
@@ -36,6 +37,7 @@ const PostActionButtons: React.FC<PostActionButtonsProps> = ({
         onClick={() => {
           deletePost({ id });
         }}
+        size={"sm"}
       />
     </Box>
   );

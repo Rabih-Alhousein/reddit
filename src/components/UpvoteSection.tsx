@@ -13,7 +13,6 @@ const UpvoteSection: React.FC<UpvoteSectionProps> = ({ handleVote, post }) => {
 
   return (
     <Flex
-      mr={6}
       direction="column"
       alignItems="center"
       background="#f2f8fc"
@@ -25,6 +24,8 @@ const UpvoteSection: React.FC<UpvoteSectionProps> = ({ handleVote, post }) => {
         icon={<ChevronUpIcon />}
         onClick={() => handleVote(id, 1)}
         colorScheme={voteStatus === 1 ? "green" : undefined}
+        background={voteStatus === 1 ? "green" : "white"}
+        border="0.5px solid #b1b1b171"
       />
       <Text p={1}>{points}</Text>
       <IconButton
@@ -33,6 +34,8 @@ const UpvoteSection: React.FC<UpvoteSectionProps> = ({ handleVote, post }) => {
         icon={<ChevronDownIcon />}
         onClick={() => handleVote(id, -1)}
         colorScheme={voteStatus === -1 ? "red" : undefined}
+        background={voteStatus === -1 ? "red" : "white"}
+        border="0.5px solid #b1b1b171"
       />
     </Flex>
   );

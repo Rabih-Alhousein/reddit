@@ -8,6 +8,7 @@ import Layout from "../components/Layout";
 import { useCreatePostMutation } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import StyledBox from "../components/StyledBox";
 
 const createPost: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -28,15 +29,21 @@ const createPost: React.FC<{}> = ({}) => {
         }}
       >
         {({ isSubmitting }) => (
-          <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+          <StyledBox>
             <Form>
-              <InputField name="title" placeholder="title" label="Title" />
+              <InputField
+                name="title"
+                placeholder="title"
+                label="Title"
+                required
+              />
               <Box my={4}>
                 <InputField
                   name="text"
                   placeholder="text..."
                   label="Text"
                   textarea
+                  required
                 />
               </Box>
 
@@ -50,7 +57,7 @@ const createPost: React.FC<{}> = ({}) => {
                 Create Post
               </Button>
             </Form>
-          </Box>
+          </StyledBox>
         )}
       </Formik>
     </Layout>

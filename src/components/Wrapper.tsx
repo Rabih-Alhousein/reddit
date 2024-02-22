@@ -12,7 +12,7 @@ const Wrapper: React.FC<wrapperProps> = ({ children, variant = "regular" }) => {
   const maxWidth = variant === "regular" ? 1000 : 400;
 
   return (
-    <Box maxW={maxWidth} w="100%" mt={8} px={2} mx="auto">
+    <Box maxW={maxWidth} w="100%" mt={5} px={2} mx="auto">
       {children}
     </Box>
   );

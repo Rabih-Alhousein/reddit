@@ -1,14 +1,14 @@
-import { Button, Flex, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Input, Stack } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
+import dynamic from "next/dynamic";
 import NextLink from "next/link";
-import { useState } from "react";
-import Layout from "../components/Layout";
-import { usePostsQuery, useVoteMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import Image from "next/image";
-import profileUser from "../public/profile user.png";
+import { useEffect, useState } from "react";
+import { FaRedditSquare } from "react-icons/fa";
 import Post from "../components/Post";
 import Sidebar from "../components/Sidebar";
+import { usePostsQuery, useVoteMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+const Layout = dynamic(() => import("../components/Layout"), { ssr: false });
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -17,13 +17,17 @@ const Index = () => {
     search: "",
   });
 
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data }] = usePostsQuery({
     variables,
   });
 
+  const { posts = [], hasMore = false } = data?.posts || {};
+
   const [, vote] = useVoteMutation();
 
-  const { posts = [], hasMore = false } = data?.posts || {};
+  const handleVote = async (postId: number, value: number) => {
+    await vote({ postId, value });
+  };
 
   const handlePagination = () => {
     setVariables({
@@ -33,53 +37,53 @@ const Index = () => {
     });
   };
 
-  const handleVote = async (postId: number, value: number) => {
-    const result = await vote({ postId: postId, value });
-    if (!result.error) {
-    }
-  };
+  const CreatePost = () => (
+    <NextLink href="/create-post">
+      <Flex justifyContent="center" gap={3} p={3} bg="#FFFFFF" mb={5}>
+        <Icon
+          fontSize={44}
+          color="gray.300"
+          as={FaRedditSquare}
+          borderRadius="100%"
+        />
+
+        <Input name="text" placeholder="Create New Post" />
+      </Flex>
+    </NextLink>
+  );
 
   return (
     <Layout setVariables={setVariables}>
       <div className="bg-[#DAE0E6]">
-        {posts && fetching ? (
-          <div>Loading...</div>
-        ) : (
-          <Flex justifyContent="center" p={4} gap={5}>
-            <div>
-              <Stack spacing={6} pb={4}>
-                <NextLink href="/create-post">
-                  <Flex justifyContent="center" gap={3} p={3} bg="#FFFFFF">
-                    <Image
-                      src={profileUser}
-                      alt="Reddit User"
-                      width={40}
-                      height={30}
-                    />
-                    <Input name="text" placeholder="Create New Post" />
-                  </Flex>
-                </NextLink>
-                {posts.map((p) => (
-                  <Post key={p.title} post={p} handleVote={handleVote} />
-                ))}
-              </Stack>
-              {posts && hasMore ? (
-                <Flex>
-                  <Button
-                    m="auto"
-                    my={8}
-                    colorScheme="teal"
-                    isLoading={fetching}
-                    onClick={handlePagination}
-                  >
-                    Load More
-                  </Button>
+        <Flex justifyContent="center" p={4} gap={5}>
+          <Box flex={1}>
+            <CreatePost />
+            <Stack spacing={2} pb={4}>
+              {posts.length === 0 ? (
+                <Flex justifyContent="center" p={4}>
+                  No posts found
                 </Flex>
-              ) : null}
-            </div>
-            <Sidebar />
-          </Flex>
-        )}
+              ) : (
+                posts.map((p) => (
+                  <Post key={p.title} post={p} handleVote={handleVote} />
+                ))
+              )}
+            </Stack>
+            {posts && hasMore ? (
+              <Flex>
+                <Button
+                  m="auto"
+                  my={8}
+                  colorScheme="teal"
+                  onClick={handlePagination}
+                >
+                  Load More
+                </Button>
+              </Flex>
+            ) : null}
+          </Box>
+          <Sidebar />
+        </Flex>
       </div>
     </Layout>
   );

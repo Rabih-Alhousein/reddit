@@ -10,14 +10,11 @@ const SearchInput: React.FC<SearchInputProps> = ({ onChange }) => {
   return (
     <Flex flexGrow={1} maxWidth={"600px"} mr={2} alignItems="center">
       <InputGroup>
-        <InputLeftElement
-          pointerEvents="none"
-          color="gray.400"
-          // children={<SearchIcon mb={2} />}
-        >
-          <SearchIcon mb={2} />
+        <InputLeftElement pointerEvents="none" color="gray.400">
+          <SearchIcon mb={1} fontSize={20} />
         </InputLeftElement>
         <Input
+          borderRadius={50}
           placeholder="Search Reddit"
           fontSize="10pt"
           _placeholder={{ color: "gray.500" }}

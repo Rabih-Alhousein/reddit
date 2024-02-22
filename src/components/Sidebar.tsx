@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { FaReddit } from "react-icons/fa";
+import { GrInProgress } from "react-icons/gr";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import image from "../public/redditPersonalHome.png";
@@ -16,7 +17,10 @@ const Sidebar: React.FC = () => {
       pb={3}
       borderColor="gray.300"
       position="sticky"
+      top={"87px"}
       height={"fit-content"}
+      maxWidth={"300px"}
+      display={{ base: "none", md: "block" }}
     >
       <Flex
         align="flex-end"
@@ -37,13 +41,17 @@ const Sidebar: React.FC = () => {
           </Link>
         </Flex>
         <Stack spacing={3}>
-          <Text fontSize="9pt">
-            Your personal Reddit frontpage, built for you.
+          <Text fontSize="14px">
+            Your personal Reddit frontpage. Come here to check in with your
+            favorite communities.
           </Text>
 
           <Button
             height="30px"
-            color="#ff4500"
+            bg="#0079D3"
+            _hover={{ bg: "#3f92d1" }}
+            color="#ffffff"
+            borderRadius={50}
             onClick={() => {
               router.push("/create-post");
             }}
@@ -51,7 +59,14 @@ const Sidebar: React.FC = () => {
             Create Post
           </Button>
 
-          <Button variant="outline" height="30px">
+          <Button
+            variant="outline"
+            height="30px"
+            color="#0079D3"
+            borderColor="#0079D3"
+            borderRadius={50}
+            rightIcon={<Icon as={GrInProgress} />}
+          >
             Create Community
           </Button>
         </Stack>

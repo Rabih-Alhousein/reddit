@@ -14,7 +14,7 @@ const YourComponent: React.FC<Props> = ({ handleVote, post }) => {
   return (
     <Flex shadow="md" borderWidth="1px" bg="#FFFFFF">
       <UpvoteSection handleVote={handleVote} post={post} />
-      <Flex justifyContent="space-between" flex={1} p={5} gap={3}>
+      <Flex justifyContent="space-between" flex={1} p={5} gap={2}>
         <Box>
           <NextLink href="/page/[id]" as={`/page/${post.id}`}>
             <Link>
@@ -24,8 +24,8 @@ const YourComponent: React.FC<Props> = ({ handleVote, post }) => {
           <Text>Post by {post.creator.username}</Text>
           <Text mt={4}>{post.textSnippet}...</Text>
         </Box>
-        <Box alignSelf={"flex-end"}>
-          <PostActionButtons id={post.id} creatorId={post.creator.id} />
+        <Box alignSelf={"flex-end"} minWidth={"80px"}>
+          {/* <PostActionButtons id={post.id} creatorId={post.creator.id} /> */}
         </Box>
       </Flex>
     </Flex>

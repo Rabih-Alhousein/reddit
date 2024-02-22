@@ -13,22 +13,31 @@ type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   placeholder: string;
   name: string;
   textarea?: boolean;
+  required?: boolean;
+  size?: string;
 };
 
 const InputField: React.FC<InputFieldProps> = ({
   label,
   size: _,
   textarea,
-  ...props
+  name,
+  placeholder,
+  required,
 }) => {
   const InputOrTextarea = textarea ? Textarea : Input;
 
-  const [field, { error }] = useField(props);
+  const [field, { error }] = useField( name );
 
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel>{label}</FormLabel>
-      <InputOrTextarea {...field} {...props} placeholder={props.placeholder} />
+      <InputOrTextarea
+        {...field}
+        placeholder={placeholder}
+        name={name}
+        required={required}
+      />
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
     </FormControl>
   );

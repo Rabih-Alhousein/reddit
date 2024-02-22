@@ -10,6 +10,8 @@ import {
 } from "../../../generated/graphql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
 import { useGetIntId } from "../../../utils/useGetIntId";
+import { useIsAuth } from "../../../hooks/useIsAuth";
+import StyledBox from "../../../components/StyledBox";
 
 const EditPost = ({}) => {
   const intId = useGetIntId();
@@ -21,6 +23,8 @@ const EditPost = ({}) => {
     },
   });
   const [, updatePost] = useUpdatePostMutation();
+
+  useIsAuth();
 
   if (fetching) {
     return (
@@ -48,15 +52,21 @@ const EditPost = ({}) => {
         }}
       >
         {({ isSubmitting }) => (
-          <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+          <StyledBox>
             <Form>
-              <InputField name="title" placeholder="title" label="Title" />
+              <InputField
+                name="title"
+                placeholder="title"
+                label="Title"
+                required
+              />
               <Box mt={4}>
                 <InputField
                   textarea
                   name="text"
                   placeholder="text..."
                   label="Body"
+                  required
                 />
               </Box>
               <Button
@@ -68,7 +78,7 @@ const EditPost = ({}) => {
                 update post
               </Button>
             </Form>
-          </Box>
+          </StyledBox>
         )}
       </Formik>
     </Layout>

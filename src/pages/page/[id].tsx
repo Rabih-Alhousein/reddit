@@ -6,6 +6,8 @@ import Layout from "../../components/Layout";
 import { usePostQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetIntId } from "../../utils/useGetIntId";
+import { useIsAuth } from "../../hooks/useIsAuth";
+import StyledBox from "../../components/StyledBox";
 
 const Page: React.FC = () => {
   const intId = useGetIntId();
@@ -16,15 +18,19 @@ const Page: React.FC = () => {
     },
   });
 
+  useIsAuth();
+
   if (fetching) {
     return <Layout>Loading...</Layout>;
   }
 
   return (
     <Layout>
-      <Heading mb={4}>{data.post.title}</Heading>
-      <Text mb={4}>{data.post.text}</Text>
-      <PostActionButtons id={data.post.id} creatorId={data.post.creator.id} />
+      <StyledBox>
+        <Heading mb={4}>{data.post.title}</Heading>
+        <Text mb={4}>{data.post.text}</Text>
+        <PostActionButtons id={data.post.id} creatorId={data.post.creator.id} />
+      </StyledBox>
     </Layout>
   );
 };

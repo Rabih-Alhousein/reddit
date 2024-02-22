@@ -10,6 +10,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { Link } from "@chakra-ui/react";
+import StyledBox from "../components/StyledBox";
 
 interface loginProps {}
 
@@ -34,7 +35,7 @@ const Login: React.FC<loginProps> = ({}) => {
 
   return (
     <Wrapper variant="small">
-      <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+      <StyledBox>
         <Formik
           initialValues={{ usernameOrEmail: "", password: "" }}
           onSubmit={async (values, { setErrors }) => {
@@ -48,12 +49,14 @@ const Login: React.FC<loginProps> = ({}) => {
                 name="usernameOrEmail"
                 placeholder="username or email"
                 label="Username or Email"
+                required
               />
               <Box my={4}>
                 <InputField
                   name="password"
                   placeholder="password"
                   label="Password"
+                  required
                 />
               </Box>
               <NextLink href="/forgot-password">
@@ -71,7 +74,7 @@ const Login: React.FC<loginProps> = ({}) => {
             </Form>
           )}
         </Formik>
-      </Box>
+      </StyledBox>
     </Wrapper>
   );
 };

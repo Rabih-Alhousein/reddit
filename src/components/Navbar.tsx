@@ -27,14 +27,25 @@ const Navbar: React.FC<NavbarProps> = ({ setVariables }) => {
     // user not logged in
   } else {
     body = (
-      <Flex w="90%" margin="auto" justifyContent="space-between">
+      <Flex w="98%" margin="auto" padding={2} justifyContent="space-between">
         <NextLink href={"/"}>
-          <Flex alignItems="center" gap={3}>
-            <Image src={RedditImg} alt="Reddit" width={40} height={40} />
-            <Heading color="#ff4500">reddit</Heading>
+          <Flex
+            alignItems="center"
+            gap={3}
+            marginRight={{ base: "15px", md: "none" }}
+          >
+            <Image src={RedditImg} alt="Reddit" width={32} height={32} />
+            <Heading
+              color="#ff4500"
+              fontSize={25}
+              fontWeight={"extrabold"}
+              display={{ base: "none", md: "block" }}
+            >
+              reddit
+            </Heading>
           </Flex>
         </NextLink>
-        <SearchInput
+        {/* <SearchInput
           onChange={(e) =>
             setVariables({
               limit: 10,
@@ -42,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({ setVariables }) => {
               search: e.target.value,
             })
           }
-        />
+        /> */}
         <Flex justifyContent="space-between" alignItems="center">
           {data?.me ? (
             <>
@@ -60,9 +71,9 @@ const Navbar: React.FC<NavbarProps> = ({ setVariables }) => {
   return (
     <Flex
       bg="#FFFFFF"
-      p={4}
       justifyContent={"flex-end"}
       position="sticky"
+      top={0}
       zIndex={99}
     >
       {body}

@@ -8,6 +8,7 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import StyledBox from "../components/StyledBox";
 
 interface registerProps {}
 
@@ -16,7 +17,7 @@ const Register: React.FC<registerProps> = ({}) => {
   const [, register] = useRegisterMutation();
   return (
     <Wrapper variant="small">
-      <Box bg={"white"} p={8} borderRadius={8} boxShadow="md">
+      <StyledBox>
         <Formik
           initialValues={{ email: "", username: "", password: "" }}
           onSubmit={async (values, { setErrors }) => {
@@ -54,7 +55,7 @@ const Register: React.FC<registerProps> = ({}) => {
             </Form>
           )}
         </Formik>
-      </Box>
+      </StyledBox>
     </Wrapper>
   );
 };
