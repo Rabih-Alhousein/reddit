@@ -12,8 +12,8 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
       <Button
         variant="outline"
         height="28px"
-        display={{ base: "none", sm: "flex" }}
-        width={{ base: "70px", md: "110px" }}
+        display={{ sm: "flex" }}
+        width={{ base: "90px", md: "110px" }}
         mr={2}
         onClick={() => router.push("./login")}
       >
@@ -22,8 +22,8 @@ const AuthButtons: React.FC<AuthButtonsProps> = () => {
       <Button
         variant="solid"
         height="28px"
-        display={{ base: "none", sm: "flex" }}
-        width={{ base: "70px", md: "110px" }}
+        display={{ sm: "flex" }}
+        width={{ base: "90px", md: "110px" }}
         mr={2}
         onClick={() => router.push("./register")}
       >
