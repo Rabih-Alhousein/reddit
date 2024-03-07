@@ -66,6 +66,7 @@ const Sidebar: React.FC = () => {
             borderColor="#0079D3"
             borderRadius={50}
             rightIcon={<Icon as={GrInProgress} />}
+            isDisabled
           >
             Create Community
           </Button>

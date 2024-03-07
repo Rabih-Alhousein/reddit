@@ -27,9 +27,12 @@ const Page: React.FC = () => {
   return (
     <Layout>
       <StyledBox>
-        <Heading mb={4}>{data.post.title}</Heading>
-        <Text mb={4}>{data.post.text}</Text>
-        <PostActionButtons id={data.post.id} creatorId={data.post.creator.id} />
+        <Heading mb={4}>{data?.post?.title}</Heading>
+        <Text mb={4}>{data?.post?.text}</Text>
+        <PostActionButtons
+          id={data?.post?.id}
+          creatorId={data?.post?.creator?.id}
+        />
       </StyledBox>
     </Layout>
   );

@@ -6,18 +6,26 @@ import { useEffect, useState } from "react";
 import { FaRedditSquare } from "react-icons/fa";
 import Post from "../components/Post";
 import Sidebar from "../components/Sidebar";
-import { usePostsQuery, useVoteMutation } from "../generated/graphql";
+import {
+  useMeQuery,
+  usePostsQuery,
+  useVoteMutation,
+} from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useRouter } from "next/router";
 const Layout = dynamic(() => import("../components/Layout"), { ssr: false });
 
 const Index = () => {
+  const router = useRouter();
+  const [{ data: meData, fetching: meFetching }] = useMeQuery();
+
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as string | null,
     search: "",
   });
 
-  const [{ data }] = usePostsQuery({
+  const [{ data, fetching }] = usePostsQuery({
     variables,
   });
 
@@ -26,6 +34,10 @@ const Index = () => {
   const [, vote] = useVoteMutation();
 
   const handleVote = async (postId: number, value: number) => {
+    if (!meData?.me && !meFetching) {
+      router.push("/login");
+    }
+
     await vote({ postId, value });
   };
 
@@ -59,7 +71,11 @@ const Index = () => {
           <Box flex={1}>
             <CreatePost />
             <Stack spacing={2} pb={4}>
-              {posts.length === 0 ? (
+              {fetching ? (
+                <Flex justifyContent="center" p={4}>
+                  Loading...
+                </Flex>
+              ) : posts.length === 0 ? (
                 <Flex justifyContent="center" p={4}>
                   No posts found
                 </Flex>

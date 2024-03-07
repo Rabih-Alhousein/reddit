@@ -25,7 +25,7 @@ const YourComponent: React.FC<Props> = ({ handleVote, post }) => {
           <Text mt={4}>{post.textSnippet}...</Text>
         </Box>
         <Box alignSelf={"flex-end"} minWidth={"80px"}>
-          {/* <PostActionButtons id={post.id} creatorId={post.creator.id} /> */}
+          <PostActionButtons id={post.id} creatorId={post.creator.id} />
         </Box>
       </Flex>
     </Flex>

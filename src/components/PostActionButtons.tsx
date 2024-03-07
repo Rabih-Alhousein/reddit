@@ -3,6 +3,7 @@ import { Box, IconButton, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { useDeletePostMutation, useMeQuery } from "../generated/graphql";
+import { useRouter } from "next/router";
 
 interface PostActionButtonsProps {
   id: number;
@@ -13,12 +14,17 @@ const PostActionButtons: React.FC<PostActionButtonsProps> = ({
   id,
   creatorId,
 }) => {
+  const router = useRouter();
   const [{ data: meData }] = useMeQuery();
   const [, deletePost] = useDeletePostMutation();
 
   if (meData?.me?.id !== creatorId) {
     return null;
   }
+
+  const pathname = window.location.pathname;
+
+  const containsPage = pathname.includes("page");
 
   return (
     <Box>
@@ -36,6 +42,11 @@ const PostActionButtons: React.FC<PostActionButtonsProps> = ({
         aria-label="Delete Post"
         onClick={() => {
           deletePost({ id });
+          setTimeout(() => {
+            if (containsPage) {
+              router.push("/");
+            }
+          }, 1000);
         }}
         size={"sm"}
       />

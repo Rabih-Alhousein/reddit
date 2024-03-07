@@ -1,7 +1,7 @@
-FROM node:18
+FROM node:20
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install app dependencies
 COPY package.json ./
@@ -13,7 +13,6 @@ RUN yarn
 RUN yarn global add typescript
 
 COPY . .
-COPY .env.production .env
 
 RUN yarn build
 
