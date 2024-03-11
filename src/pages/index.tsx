@@ -1,18 +1,19 @@
-import { Box, Button, Flex, Icon, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import dynamic from "next/dynamic";
-import NextLink from "next/link";
-import { useEffect, useState } from "react";
-import { FaRedditSquare } from "react-icons/fa";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import Post from "../components/Post";
+import Premium from "../components/Premium";
+import Recommendations from "../components/Recommendations";
 import Sidebar from "../components/Sidebar";
+import CreatePostLink from "../components/createPostLink";
 import {
   useMeQuery,
   usePostsQuery,
   useVoteMutation,
 } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { useRouter } from "next/router";
 const Layout = dynamic(() => import("../components/Layout"), { ssr: false });
 
 const Index = () => {
@@ -49,27 +50,12 @@ const Index = () => {
     });
   };
 
-  const CreatePost = () => (
-    <NextLink href="/create-post">
-      <Flex justifyContent="center" gap={3} p={3} bg="#FFFFFF" mb={5}>
-        <Icon
-          fontSize={44}
-          color="gray.300"
-          as={FaRedditSquare}
-          borderRadius="100%"
-        />
-
-        <Input name="text" placeholder="Create New Post" />
-      </Flex>
-    </NextLink>
-  );
-
   return (
     <Layout setVariables={setVariables}>
       <div className="bg-[#DAE0E6]">
         <Flex justifyContent="center" p={4} gap={5}>
           <Box flex={1}>
-            <CreatePost />
+            <CreatePostLink />
             <Stack spacing={2} pb={4}>
               {fetching ? (
                 <Flex justifyContent="center" p={4}>
@@ -92,13 +78,24 @@ const Index = () => {
                   my={8}
                   colorScheme="teal"
                   onClick={handlePagination}
+                  isLoading={fetching}
                 >
                   Load More
                 </Button>
               </Flex>
             ) : null}
           </Box>
-          <Sidebar />
+
+          <Flex
+            direction="column"
+            position="sticky"
+            maxWidth={"300px"}
+            display={{ base: "none", md: "block" }}
+          >
+            <Sidebar />
+            <Premium />
+            <Recommendations />
+          </Flex>
         </Flex>
       </div>
     </Layout>

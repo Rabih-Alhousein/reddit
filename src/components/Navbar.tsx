@@ -27,7 +27,13 @@ const Navbar: React.FC<NavbarProps> = ({ setVariables }) => {
     // user not logged in
   } else {
     body = (
-      <Flex w="98%" margin="auto" padding={2} justifyContent="space-between">
+      <Flex
+        w="98%"
+        margin="auto"
+        padding={2}
+        justifyContent="space-between"
+        boxShadow={"md"}
+      >
         <NextLink href={"/"}>
           <Flex
             alignItems="center"

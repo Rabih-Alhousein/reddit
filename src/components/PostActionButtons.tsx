@@ -1,56 +1,102 @@
-import React from "react";
-import { Box, IconButton, Link } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useDeletePostMutation, useMeQuery } from "../generated/graphql";
+import { EditIcon } from "@chakra-ui/icons";
+import { Flex, Icon, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import React from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import { BsChat } from "react-icons/bs";
+import { IoArrowRedoOutline, IoBookmarkOutline } from "react-icons/io5";
+import { useDeletePostMutation, useMeQuery } from "../generated/graphql";
 
 interface PostActionButtonsProps {
-  id: number;
+  postId: number;
   creatorId: number;
 }
 
 const PostActionButtons: React.FC<PostActionButtonsProps> = ({
-  id,
+  postId,
   creatorId,
 }) => {
   const router = useRouter();
   const [{ data: meData }] = useMeQuery();
   const [, deletePost] = useDeletePostMutation();
 
-  if (meData?.me?.id !== creatorId) {
-    return null;
-  }
+  const userIsCreator = meData?.me?.id === creatorId;
 
   const pathname = window.location.pathname;
 
   const containsPage = pathname.includes("page");
 
   return (
-    <Box>
-      <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
-        <IconButton
-          as={Link}
-          mr={4}
-          icon={<EditIcon />}
-          aria-label="Edit Post"
-          size={"sm"}
-        />
-      </NextLink>
-      <IconButton
-        icon={<DeleteIcon />}
-        aria-label="Delete Post"
-        onClick={() => {
-          deletePost({ id });
-          setTimeout(() => {
-            if (containsPage) {
-              router.push("/");
-            }
-          }, 1000);
-        }}
-        size={"sm"}
-      />
-    </Box>
+    <Flex
+      ml={1}
+      mb={0.5}
+      color="gray.500"
+      fontWeight={600}
+      wrap={"wrap"}
+      gap={3}
+    >
+      <Flex
+        align="center"
+        borderRadius={4}
+        _hover={{ bg: "gray.200" }}
+        cursor="pointer"
+      >
+        <Icon as={BsChat} mr={2} />
+        <Text fontSize="9pt">3</Text>
+      </Flex>
+      <Flex
+        align="center"
+        borderRadius={4}
+        _hover={{ bg: "gray.200" }}
+        cursor="pointer"
+      >
+        <Icon as={IoArrowRedoOutline} mr={2} />
+        <Text fontSize="9pt">Share</Text>
+      </Flex>
+      <Flex
+        align="center"
+        borderRadius={4}
+        _hover={{ bg: "gray.200" }}
+        cursor="pointer"
+      >
+        <Icon as={IoBookmarkOutline} mr={2} />
+        <Text fontSize="9pt">Save</Text>
+      </Flex>
+
+      {userIsCreator && (
+        <>
+          <Flex
+            align="center"
+            borderRadius={4}
+            _hover={{ bg: "gray.200" }}
+            cursor="pointer"
+            onClick={() => {
+              router.push(`/post/edit/${postId}`);
+            }}
+          >
+            <Icon as={EditIcon} mr={2} />
+            <Text fontSize="9pt">Edit</Text>
+          </Flex>
+          <Flex
+            align="center"
+            borderRadius={4}
+            _hover={{ bg: "gray.200" }}
+            cursor="pointer"
+            onClick={() => {
+              deletePost({ id: postId });
+              setTimeout(() => {
+                if (containsPage) {
+                  router.push("/");
+                }
+              }, 1000);
+            }}
+          >
+            <Icon as={AiOutlineDelete} mr={2} />
+            <Text fontSize="9pt">Delete</Text>
+          </Flex>
+        </>
+      )}
+    </Flex>
   );
 };
 

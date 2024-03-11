@@ -43,7 +43,7 @@ const EditPost = ({}) => {
   }
 
   return (
-    <Layout variant="small">
+    <Layout variant="medium">
       <Formik
         initialValues={{ title: data.post.title, text: data.post.text }}
         onSubmit={async (values) => {

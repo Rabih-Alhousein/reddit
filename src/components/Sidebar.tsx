@@ -13,14 +13,10 @@ const Sidebar: React.FC = () => {
       direction="column"
       bg="white"
       borderRadius={4}
+      cursor="pointer"
       border="1px solid"
-      pb={3}
       borderColor="gray.300"
-      position="sticky"
-      top={"87px"}
-      height={"fit-content"}
-      maxWidth={"300px"}
-      display={{ base: "none", md: "block" }}
+      mb={4}
     >
       <Flex
         align="flex-end"

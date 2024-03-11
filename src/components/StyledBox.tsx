@@ -9,7 +9,7 @@ const StyledBox: React.FC<StyledBoxProps> = ({ children }) => {
   return (
     <Box
       bg={"white"}
-      p={8}
+      p={6}
       borderRadius={8}
       boxShadow="md"
       m={{

@@ -17,7 +17,7 @@ const createPost: React.FC<{}> = ({}) => {
   useIsAuth();
 
   return (
-    <Layout variant="small">
+    <Layout variant="medium">
       <Formik
         initialValues={{ title: "", text: "" }}
         onSubmit={async (values, { setErrors }) => {

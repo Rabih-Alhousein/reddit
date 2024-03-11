@@ -27,10 +27,15 @@ const Page: React.FC = () => {
   return (
     <Layout>
       <StyledBox>
+        <Text fontSize="12pt" fontWeight={600}>
+          {data?.post?.title}
+        </Text>
         <Heading mb={4}>{data?.post?.title}</Heading>
-        <Text mb={4}>{data?.post?.text}</Text>
+        <Text fontSize="10pt" mb={4}>
+          {data?.post?.text}
+        </Text>
         <PostActionButtons
-          id={data?.post?.id}
+          postId={data?.post?.id}
           creatorId={data?.post?.creator?.id}
         />
       </StyledBox>
