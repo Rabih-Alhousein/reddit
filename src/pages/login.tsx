@@ -26,6 +26,10 @@ const Login: React.FC<loginProps> = ({}) => {
       return;
     }
 
+    if (loginResult?.accessToken) {
+      localStorage.setItem("accessToken", loginResult.accessToken);
+    }
+
     if (loginResult?.user) {
       const nextRoute =
         typeof router.query.next === "string" ? router.query.next : "/";
@@ -79,4 +83,4 @@ const Login: React.FC<loginProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default withUrqlClient(createUrqlClient as any)(Login);

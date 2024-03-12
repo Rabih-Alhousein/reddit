@@ -64,4 +64,4 @@ const createPost: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(createPost);
+export default withUrqlClient(createUrqlClient as any)(createPost);

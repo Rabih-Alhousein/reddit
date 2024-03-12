@@ -3,7 +3,6 @@ import React from "react";
 import { FaReddit } from "react-icons/fa";
 import image from "../public/recCommsArt.png";
 
-console.log({ image });
 type RecommendationsProps = {};
 
 const Recommendations: React.FC<RecommendationsProps> = () => {

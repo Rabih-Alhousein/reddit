@@ -88,7 +88,7 @@ const PostActionButtons: React.FC<PostActionButtonsProps> = ({
                 if (containsPage) {
                   router.push("/");
                 }
-              }, 1000);
+              }, 1500);
             }}
           >
             <Icon as={AiOutlineDelete} mr={2} />

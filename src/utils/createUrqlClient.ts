@@ -21,7 +21,6 @@ export const errorExchange =
       forward(ops),
       tap(({ error }) => {
         if (error) {
-          console.log(error);
           if (error.message.includes("not authenticated")) {
             Router.replace("/login");
           }
@@ -193,7 +192,19 @@ export const createUrqlClient = (ssrExchange: any) => ({
     errorExchange,
     ssrExchange,
   ],
-  fetchOptions: {
-    credentials: "include" as const,
+  fetchOptions: () => {
+    const accessToken =
+      typeof window === "undefined"
+        ? null
+        : localStorage.getItem("accessToken");
+
+    return {
+      headers: {
+        authorization: accessToken
+          ? `Bearer ${accessToken.replace(/"/g, "")}`
+          : "",
+      },
+      credentials: "include",
+    };
   },
 });

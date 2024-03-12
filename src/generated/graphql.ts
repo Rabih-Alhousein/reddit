@@ -157,6 +157,7 @@ export type User = {
 
 export type UserResponse = {
   __typename?: "UserResponse";
+  accessToken?: Maybe<Scalars["String"]["output"]>;
   errors?: Maybe<Array<Error>>;
   user?: Maybe<User>;
 };
@@ -277,6 +278,7 @@ export type LoginMutation = {
   __typename?: "Mutation";
   login: {
     __typename?: "UserResponse";
+    accessToken?: string | null;
     errors?: Array<{
       __typename?: "Error";
       field: string;
@@ -529,6 +531,7 @@ export const LoginDocument = gql`
         updatedAt
         username
       }
+      accessToken
     }
   }
 `;
