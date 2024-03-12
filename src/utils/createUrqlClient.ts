@@ -199,12 +199,10 @@ export const createUrqlClient = (ssrExchange: any) => ({
         : localStorage.getItem("accessToken");
 
     return {
-      headers: {
-        authorization: accessToken
-          ? `Bearer ${accessToken.replace(/"/g, "")}`
-          : "",
-      },
-      credentials: "include",
+      headers: accessToken
+        ? { Authorization: `Bearer ${accessToken as string}` }
+        : undefined,
+      credentials: "include" as const,
     };
   },
 });
